@@ -9,15 +9,19 @@
 #include <cv_bridge/cv_bridge.h>
 #include <tf/transform_broadcaster.h>
 
+// Current marker map that is seened by the robot
 int marker_ID = -1;
+// Aruco config and detect objects
 static aruco::CameraParameters camera;
 static aruco::MarkerDetector Detector;
 static aruco::MarkerMap mmap_array[10];
 
+// call back function for each frame
 void image_callback(const sensor_msgs::Image::ConstPtr& msg)
 {
-    static tf::TransformBroadcaster br;
-    static aruco::MarkerMapPoseTracker MMTracker;
+    static tf::TransformBroadcaster br;     // tf boardcaster
+    static aruco::MarkerMapPoseTracker MMTracker;   // marker map tracker
+    // Marker map's internel marker id is incremental this is a lookup table
     static int marker_lookuptable[60] = {0, 0, 0, 0, 0, 0, 
                                         1, 1, 1, 1, 1, 1, 
                                         2, 2, 2, 2, 2, 2, 
@@ -39,12 +43,13 @@ void image_callback(const sensor_msgs::Image::ConstPtr& msg)
         exit(-1);
     }
     
+    // detect the markers
     auto markers=Detector.detect(cv_ptr->image);//0.05 is the marker size
     if(markers.size() != 0)
     {
+        // figure out which marker map is it and load the tracker parameter
         marker_ID = marker_lookuptable[markers[0].id];
         MMTracker.setParams(camera, mmap_array[marker_ID]);
-        std::cout << "param set" << std::endl;
         MMTracker.estimatePose(markers);
         cv::Mat tvec;
         cv::Mat rvec;
@@ -85,6 +90,7 @@ void image_callback(const sensor_msgs::Image::ConstPtr& msg)
 
 int main(int argc,char **argv)
 {
+    // Setting up ARUCO
     static const std::string config_prefix = "/home/fetch/camera_utils/src/camera_utils/config/markermap/Configuration_meter";
     static const std::string config_postfix = ".yml";
     std::string config_path;
@@ -96,7 +102,8 @@ int main(int argc,char **argv)
     }
     camera.readFromXMLFile("/home/fetch/camera_utils/src/camera_utils/config/fetch_camera_calib.yml");
     Detector.setDictionary("ARUCO_MIP_36h12");
-
+    
+    // Setting up ROS
     ros::init(argc, argv, "local_camera_pose_estimator");
     ros::NodeHandle n;
     ros::Publisher marker_ID_pub = n.advertise<std_msgs::Int32>("dewey_marker_ID", 1);
