@@ -1,0 +1,12 @@
+<launch>
+   <node pkg="tf" type="static_transform_publisher" name="markermap0_broadcaster" args="1.55 -0.05 0 0 0 0 1 map markermap0 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap1_broadcaster" args="4.45 2.10 0 0 0 0 1 map markermap1 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap2_broadcaster" args="4.45 5.90 0 0 0 0 1 map markermap2 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap3_broadcaster" args="4.45 9.85 0 0 0 0 1 map markermap3 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap4_broadcaster" args="16 9.85 0 0 0 0 1 map markermap4 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap5_broadcaster" args="22.3 9.85 0 0 0 0 1 map markermap5 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap6_broadcaster" args="22.3 5.9 0 0 0 0 1 map markermap6 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap7_broadcaster" args="22.3 1.2 0 0 0 0 1 map markermap7 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap8_broadcaster" args="16 1.2 0 0 0 0 1 map markermap8 100" />
+   <node pkg="tf" type="static_transform_publisher" name="markermap9_broadcaster" args="16 5.9 0 0 0 0 1 map markermap9 100" />
+</launch>
